@@ -1,0 +1,25 @@
+- name: Установить Docker
+  apt:
+    name: docker.io
+    state: present
+    update_cache: true
+
+- name: Загрузить Docker-образ todo-app из Docker Hub
+  docker_image:
+    name: antonaleks/101-todo-app
+    tag: latest
+    source: pull
+
+- name: Запустить контейнер todo-app
+  docker_container:
+    name: todo
+    image: antonaleks/101-todo-app:latest
+    state: started
+    restart_policy: always
+    ports:
+      - "3000:80"
+    env:
+      DB_HOST: 192.168.0.122
+      DB_USER: root
+      DB_PASSWORD: password
+      DB_NAME: todos

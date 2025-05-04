@@ -1,0 +1,23 @@
+- name: Установить Docker
+  apt:
+    name: docker.io
+    state: present
+    update_cache: true
+
+- name: Запустить контейнер MySQL
+  docker_container:
+    name: mysql
+    image: mysql:5.7
+    state: started
+    restart_policy: always
+    env:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: todos
+    ports:
+      - "3306:3306"
+
+- name: Разрешить входящий трафик на порт 3306
+  ufw:
+    rule: allow
+    port: 3306
+    proto: tcp
